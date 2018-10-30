@@ -1,12 +1,17 @@
 import pika
+import os
 
 
 class BaseNode(object):
 
     def __init__(self):
-        credentials = pika.PlainCredentials('user', 'user')
+        user = os.environ["RABBITMQ_USER"]
+        password = os.environ["RABBITMQ_PASSWORD"]
+        addr = os.environ["RABBITMQ_ADDR"]
+
+        credentials = pika.PlainCredentials(user, password)
         parameters = pika.ConnectionParameters(
-                'localhost', 5672, '/', credentials, heartbeat_interval=0)
+                addr, 5672, '/', credentials, heartbeat_interval=0)
         self.connection = pika.BlockingConnection(parameters)
 
         self.channel = self.connection.channel()

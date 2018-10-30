@@ -1,6 +1,7 @@
 from src.nodes.base import BaseNode
 
 import json
+import os
 import io
 from minio import Minio
 from minio.error import BucketAlreadyOwnedByYou
@@ -11,11 +12,14 @@ class Collector(BaseNode):
 
     def __init__(self):
         super(Collector, self).__init__()
+        user = os.environ["MINIO_USER"]
+        password = os.environ["MINIO_PASSWORD"]
+        addr = os.environ["MINIO_ADDR"]
 
         self.minioClient = Minio(
-                "172.17.0.2:9000",
-                access_key="user",
-                secret_key="user1234",
+                addr + ":9000",
+                access_key=user,
+                secret_key=password,
                 secure=False)
 
         try:

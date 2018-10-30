@@ -13,7 +13,7 @@ def get_args():
     dispatcher_parser.add_argument("--domain", type=str,
                                    default="pl")
     dispatcher_parser.add_argument("--location-id", type=str,
-                                   required=True)
+                                   default=274723)
 
     subparsers.add_parser("worker")
     subparsers.add_parser("collector")
@@ -25,9 +25,9 @@ def main():
     args = get_args()
 
     opt = {
-        "dispatcher": Dispatcher,
-        "worker": Worker,
-        "collector": Collector
+        "dispatcher": lambda: Dispatcher(args.location_id),
+        "worker": lambda: Worker(),
+        "collector": lambda: Collector()
         }
     opt[args.type]()
 
