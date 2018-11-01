@@ -60,15 +60,11 @@ jobs:
     steps:
     - checkout
     - run:
-        name: create venv, install flake8
+        name: create venv, install flake8, run flake8
         command: |
           python3 -m venv .venv
           . ~/scrap-me/.venv/bin/activate
           pip install -q flake8
-    - run:
-        name: run style check
-        command: |
-          . ~/scrap-me/.venv/bin/activate
           echo "Test src catalog: " && flake8 --ignore=W605 src/
           echo "Test tests catalog: " && flake8 tests/
   tests:
@@ -80,8 +76,9 @@ jobs:
     - run:
         name: run pytest
         command: |
+          python3 -m venv .venv
           . ~/scrap-me/.venv/bin/activate
-          pip install -r requirements.txt
+          pip install -q -r requirements.txt
           pytests -v tests/
 workflows:
   version: 2
