@@ -3,7 +3,7 @@ language: python
 python:
   - "3.6"
 install:
-  pip install --user -r requirements.txt
+  pip install -r requirements.txt
 env:
   global:
   - CHANGE_MINIKUBE_NONE_USER=true
