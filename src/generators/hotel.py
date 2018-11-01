@@ -15,9 +15,9 @@ class HotelGenerator(BaseGenerator):
     def _hotel_id_generator(self, city_id):
 
         gen = self._id_generators(
-                ids=city_id,
-                pattern="^/Hotel_Review-g[0-9]+-d([0-9]+).*\.html$",   # noqa
-                base_url="https://pl.tripadvisor.com/Hotels-g{}-oa{}",
+                ids=city_id,                                            # noqa
+                pattern="^/Hotel_Review-g[0-9]+-d([0-9]+).*\.html$",    # noqa
+                base_url="https://pl.tripadvisor.com/Hotels-g{}-oa{}",  # noqa
                 offset_step=30)
 
         for hotel_id in gen:
@@ -34,9 +34,9 @@ class HotelGenerator(BaseGenerator):
             quit()
 
         gen = self._id_generators(
-                ids=location_id,
-                pattern="^/Hotels-g([0-9]+)-(?!d[0-9]+).*\.html$",             # noqa
-                base_url="https://pl.tripadvisor.com/Hotels-g{}-oa{}",
+                ids=location_id,                                                # noqa
+                pattern="^/Hotels-g([0-9]+)-(?!d[0-9]+).*\.html$",              # noqa
+                base_url="https://pl.tripadvisor.com/Hotels-g{}-oa{}",          # noqa
                 offset_step=20)
 
         for city_id in gen:

@@ -69,7 +69,7 @@ jobs:
         name: run style check
         command: |
           . ~/scrap-me/.venv/bin/activate
-          echo "Test src catalog: " && flake8 src/
+          echo "Test src catalog: " && flake8 --ignore=W605 src/
           echo "Test tests catalog: " && flake8 tests/
   tests:
     docker:
@@ -80,7 +80,7 @@ jobs:
     - run:
         name: run pytest
         command: |
-          . .venv/bin/activate
+          . ~/scrap-me/.venv/bin/activate
           pip install -r requirements.txt
           pytests -v tests/
 workflows:
