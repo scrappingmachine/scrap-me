@@ -18,14 +18,14 @@ class Worker(BaseNode):
         self.channel.queue_declare(queue='scrap_task')
         self.channel.queue_declare(queue='scrap_result')
         self.channel.basic_consume(
-                self.callback,
-                queue='scrap_task',
-                no_ack=True)
+            self.callback,
+            queue='scrap_task',
+            no_ack=True)
         self.channel.start_consuming()
 
     def process_task(self, city_id, hotel_id):
         url = "https://pl.tripadvisor.com/Hotel_Review-g{}-d{}".format(
-                city_id, hotel_id)
+            city_id, hotel_id)
         soup = ReviewGenerator.get_soup(url)
         name = soup.find("h1", attrs={
             "class": "ui_header", "id": "HEADING"})
@@ -34,7 +34,7 @@ class Worker(BaseNode):
             "class": "ui_bubble_rating"})
         if rating:
             rating = rating.get("class")[1]
-            rating = re.search("bubble_(\d\d)", rating)     # noqa
+            rating = re.search("bubble_(\d\d)", rating)
             rating = rating.group(1) if rating else None
         else:
             rating = None
@@ -50,6 +50,6 @@ class Worker(BaseNode):
 
         if hotel:
             self.channel.basic_publish(
-                    exchange='',
-                    routing_key='scrap_result',
-                    body=json.dumps(hotel, cls=CustomEncoder))
+                exchange='',
+                routing_key='scrap_result',
+                body=json.dumps(hotel, cls=CustomEncoder))
