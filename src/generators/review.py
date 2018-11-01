@@ -40,13 +40,12 @@ class ReviewGenerator(BaseGenerator):
 
     def _review_id_generator(self, city_id, hotel_id):
 
-        gen = self._id_generators(
-                ids=(city_id, hotel_id),
-                pattern="^/ShowUserReviews-g{}-d{}-r([0-9]+).*\.html$".format(
-                    city_id, hotel_id),
-                base_url="https://pl.tripadvisor.com/"
-                         "Hotel_Review-g{}-d{}-Reviews-or{}",
-                offset_step=5)
+        gen = self._id_generators(ids=(city_id, hotel_id),
+                                  pattern="^/ShowUserReviews-g{}-d{}-r([0-9]+).*\.html$".
+                                  format(city_id, hotel_id),
+                                  base_url="https://pl.tripadvisor.com/"
+                                           "Hotel_Review-g{}-d{}-Reviews-or{}",
+                                  offset_step=5)
 
         for review_id in gen:
             yield review_id

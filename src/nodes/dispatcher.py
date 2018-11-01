@@ -10,11 +10,10 @@ class Dispatcher(BaseNode):
         self.__start()
 
     def __start(self):
-
         for task in HotelGenerator(274723):
             self.channel.basic_publish(
-                    exchange='',
-                    routing_key='scrap_task',
-                    body=" ".join(task))
+                exchange='',
+                routing_key='scrap_task',
+                body=" ".join(task))
 
         self.connection.close()
