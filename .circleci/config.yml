@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  precheck:
+  build:
     docker:
       - image: circleci/python:3.6.6-jessie-browsers
     working_directory: ~/scrap-me
@@ -60,4 +60,9 @@ jobs:
             curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh
             chmod 700 get_helm.sh
             ./get_helm.sh
-
+workflows:
+  version: 2
+  build_and_create_environment:
+    jobs:
+      - build
+      - environment
