@@ -42,9 +42,8 @@ jobs:
             mkdir -p $HOME/.minikube
             touch $HOME/.kube/config
             export KUBECONFIG=$HOME/.kube/config
-            sudo -E minikube start --vm-driver=none
-            while [ True ]; do
-              echo "Waiting for kubectl..."
+            sudo -E minikube start --vm-driver=none --bootstrapper=localkube
+            for i in {1..150}; do
               kubectl get po &> /dev/null
               if [ $? -ne 1 ]; then
                 break
