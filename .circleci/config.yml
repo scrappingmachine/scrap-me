@@ -26,6 +26,7 @@ jobs:
   environment:
     machine: true
     environment:
+      K8S_VERSION: v1.10.0
       MINIKUBE_WANTUPDATENOTIFICATION=false
       MINIKUBE_WANTREPORTERRORPROMPT=false
       MINIKUBE_HOME=$HOME
@@ -34,20 +35,23 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install minikube and kubectl
+          name: install kubectl
           command: |
-            curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo cp minikube /usr/local/bin/ && rm minikube
-            curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo cp kubectl /usr/local/bin/ && rm kubectl
+            curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
             mkdir -p $HOME/.kube
-            mkdir -p $HOME/.minikube
             touch $HOME/.kube/config
-            sudo -E minikube start --vm-driver=none
-            for i in {1..150}; do
-              kubectl get po &> /dev/null
-              if [ $? -ne 1 ]; then
-                break
-              fi
-              sleep 2
+      - run:
+          name: install minikube
+          command: |
+            curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+            mkdir -p $HOME/.minikube
+            sudo -E minikube start --vm-driver=none --kubernetes-version=${K8S_VERSION} &> $HOME/minikube.log
+      - run:
+          name: wait for k8s
+          command: |
+            JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}';
+            until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do
+              sleep 1;
             done
       - run:
           name: fix RBAC
