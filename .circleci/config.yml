@@ -1,5 +1,4 @@
 version: 2
-
 jobs:
   build:
     machine:
@@ -54,3 +53,40 @@ jobs:
           kubectl -n kube-system create sa tiller
           kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
           helm init --wait --service-account tiller
+  style_check:
+    docker:
+    - image: circleci/python:3.6.6-jessie-browsers
+    working_directory: ~/scrap-me
+    steps:
+    - checkout
+    - run:
+        name: create venv, install flake8
+        command: |
+          python3 -m venv .venv
+          . ~/scrap-me/.venv/bin/activate
+          pip install -q flake8
+    - run:
+        name: run style check
+        command: |
+          . ~/scrap-me/.venv/bin/activate
+          echo "Test src catalog: " && flake8 src/
+          echo "Test tests catalog: " && flake8 tests/
+  tests:
+    docker:
+    - image: circleci/python:3.6.6-jessie-browsers
+    working_directory: ~/scrap-me
+    steps:
+    - checkout
+    - run:
+        name: run pytest
+        command: |
+          . .venv/bin/activate
+          pip install -r requirements.txt
+          pytests -v tests/
+workflows:
+  version: 2
+  create_environment:
+    jobs:
+      - build
+      - style_check
+      - tests

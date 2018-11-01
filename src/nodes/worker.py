@@ -34,7 +34,7 @@ class Worker(BaseNode):
             "class": "ui_bubble_rating"})
         if rating:
             rating = rating.get("class")[1]
-            rating = re.search("bubble_(\d\d)", rating)                             #noqa: W605
+            rating = re.search("bubble_(\d\d)", rating)     # noqa
             rating = rating.group(1) if rating else None
         else:
             rating = None
