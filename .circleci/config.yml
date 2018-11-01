@@ -1,20 +1,63 @@
 version: 2
 jobs:
-  build:
+  precheck:
     docker:
-      - image: circleci/python:3.6.1
+      - image: circleci/python:3.6.6-jessie-browsers
+    working_directory: ~/scrap-me
     steps:
       - checkout
       - run:
-          name: install dependencies
+          name: create venv, install flake8
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-          name: run tests
-          command: |
-            . venv/bin/activate
-            pytest -v tests/
+            python3 -m venv .venv
+            . ~/scrap-me/.venv/bin/activate
+            pip install -q flake8
+      - run:
           name: run style check
           command: |
-              flake8 .
+            . ~/scrap-me/.venv/bin/activate
+            flake8 ./
+      - run:
+          name: run tests
+          command: |
+            . ~/scrap-me/.venv/bin/activate
+            pytest -v tests/
+  environment:
+    docker:
+      - image: circleci/python:3.6.6-jessie-browsers
+    working_directory: ~/scrap-me
+    steps:
+      - checkout
+      - run:
+          name: install minikube and kubectl
+          command: |
+            curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo cp minikube /usr/local/bin/ && rm minikube
+            curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo cp kubectl /usr/local/bin/ && rm kubectl
+            export MINIKUBE_WANTUPDATENOTIFICATION=false
+            export MINIKUBE_WANTREPORTERRORPROMPT=false
+            export MINIKUBE_HOME=$HOME
+            export CHANGE_MINIKUBE_NONE_USER=true
+            mkdir -p $HOME/.kube
+            mkdir -p $HOME/.minikube
+            touch $HOME/.kube/config
+            export KUBECONFIG=$HOME/.kube/config
+            sudo -E minikube start --vm-driver=none
+            for i in {1..150}; do
+              kubectl get po &> /dev/null
+              if [ $? -ne 1 ]; then
+                break
+              fi
+              sleep 2
+            done
+      - run:
+          name: set up k8s for helm
+          command: |
+            kubectl create serviceaccount --namespace kube-system tiller
+            kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+      - run:
+          name: install helm
+          command: |
+            curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh
+            chmod 700 get_helm.sh
+            ./get_helm.sh
+
