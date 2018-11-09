@@ -11,7 +11,7 @@ class BaseNode(object):
 
         credentials = pika.PlainCredentials(user, password)
         parameters = pika.ConnectionParameters(
-                addr, 5672, '/', credentials, heartbeat_interval=0)
+            addr, 5672, '/', credentials, heartbeat_interval=0)
         self.connection = pika.BlockingConnection(parameters)
 
         self.channel = self.connection.channel()

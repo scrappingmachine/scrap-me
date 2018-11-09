@@ -17,10 +17,10 @@ class Collector(BaseNode):
         addr = os.environ["MINIO_ADDR"]
 
         self.minioClient = Minio(
-                addr + ":9000",
-                access_key=user,
-                secret_key=password,
-                secure=False)
+            addr + ":9000",
+            access_key=user,
+            secret_key=password,
+            secure=False)
 
         try:
             self.minioClient.make_bucket("reviews")

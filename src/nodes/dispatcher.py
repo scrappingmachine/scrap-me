@@ -14,7 +14,7 @@ class Dispatcher(BaseNode):
 
         for task in HotelGenerator(self.location_id):
             self.channel.basic_publish(
-                    exchange='',
-                    routing_key='scrap_task',
-                    body=" ".join(task))
+                exchange='',
+                routing_key='scrap_task',
+                body=" ".join(task))
         self.connection.close()
