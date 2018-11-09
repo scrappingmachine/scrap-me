@@ -18,4 +18,5 @@ class Dispatcher(BaseNode):
                     routing_key='scrap_task',
                     body=" ".join(task))
 
+
         self.connection.close()

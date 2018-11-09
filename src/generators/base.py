@@ -35,7 +35,7 @@ class BaseGenerator(object):
             set_of_ids = soup.find_all("a", href=re.compile(pattern))
             set_of_ids = [a.get("href") for a in set_of_ids if a]
             set_of_ids = [
-                    re.search(pattern, a) for a in set_of_ids]
+                re.search(pattern, a) for a in set_of_ids]
             set_of_ids = {a.group(1) for a in set_of_ids if a}
 
             if not set_of_ids:

@@ -39,7 +39,7 @@ class ReviewGenerator(BaseGenerator):
                       "translation from another language".format(url))
 
     def _review_id_generator(self, city_id, hotel_id):
-
+        
         gen = self._id_generators(
                 ids=(city_id, hotel_id),
                 pattern="^/ShowUserReviews-g{}-d{}-r([0-9]+).*\.html$".format(

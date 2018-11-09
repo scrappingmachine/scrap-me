@@ -15,6 +15,7 @@ def get_args():
     dispatcher_parser.add_argument("--location-id", type=str,
                                    default=274723)
 
+
     subparsers.add_parser("worker")
     subparsers.add_parser("collector")
 

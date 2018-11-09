@@ -15,10 +15,10 @@ class HotelGenerator(BaseGenerator):
     def _hotel_id_generator(self, city_id):
 
         gen = self._id_generators(
-                ids=city_id,
-                pattern="^/Hotel_Review-g[0-9]+-d([0-9]+).*\.html$",
-                base_url="https://pl.tripadvisor.com/Hotels-g{}-oa{}",
-                offset_step=30)
+            ids=city_id,  # noqa
+            pattern="^/Hotel_Review-g[0-9]+-d([0-9]+).*\.html$",
+            base_url="https://pl.tripadvisor.com/Hotels-g{}-oa{}",
+            offset_step=30)
 
         for hotel_id in gen:
             yield hotel_id
@@ -26,7 +26,7 @@ class HotelGenerator(BaseGenerator):
     def _city_id_generator(self, location_id):
 
         soup = self.get_soup(
-                "https://pl.tripadvisor.com/Hotels-g{}".format(location_id))
+            "https://pl.tripadvisor.com/Hotels-g{}".format(location_id))
 
         if not soup.find("div", attrs={"class": "leaf_geo_list_wrapper"}):
             print("Only id of continet or country is supported "
@@ -34,10 +34,10 @@ class HotelGenerator(BaseGenerator):
             quit()
 
         gen = self._id_generators(
-                ids=location_id,
-                pattern="^/Hotels-g([0-9]+)-(?!d[0-9]+).*\.html$",
-                base_url="https://pl.tripadvisor.com/Hotels-g{}-oa{}",
-                offset_step=20)
+            ids=location_id,
+            pattern="^/Hotels-g([0-9]+)-(?!d[0-9]+).*\.html$",
+            base_url="https://pl.tripadvisor.com/Hotels-g{}-oa{}",
+            offset_step=20)
 
         for city_id in gen:
             if city_id != location_id:
