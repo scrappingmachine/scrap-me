@@ -21,7 +21,7 @@ class ReviewGenerator(BaseGenerator):
             try:
                 rating = soup.find("span", attrs={
                     "class": "ui_bubble_rating"}).get("class")[1]
-                rating = re.search("bubble_(\d\d)", rating).group(1)
+                rating = re.search(r"bubble_(\d\d)", rating).group(1)
                 author = soup.find("div", attrs={
                     "class": "info_text"}).find("div").text
                 title = soup.find("h1", attrs={
@@ -39,13 +39,13 @@ class ReviewGenerator(BaseGenerator):
                       "translation from another language".format(url))
 
     def _review_id_generator(self, city_id, hotel_id):
-
-        gen = self._id_generators(ids=(city_id, hotel_id),
-                                  pattern="^/ShowUserReviews-g{}-d{}-r([0-9]+).*\.html$".
-                                  format(city_id, hotel_id),
-                                  base_url="https://pl.tripadvisor.com/"
-                                           "Hotel_Review-g{}-d{}-Reviews-or{}",
-                                  offset_step=5)
+        gen = self._id_generators(
+            ids=(city_id, hotel_id),
+            pattern=r"^/ShowUserReviews-g{}-d{}-r([0-9]+).*\.html$".format(
+                city_id, hotel_id),
+            base_url="https://pl.tripadvisor.com/"
+                     "Hotel_Review-g{}-d{}-Reviews-or{}",
+            offset_step=5)
 
         for review_id in gen:
             yield review_id
