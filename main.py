@@ -11,7 +11,7 @@ def get_args():
 
     dispatcher_parser = subparsers.add_parser("dispatcher")
     dispatcher_parser.add_argument("--domain", type=str,
-                                   default="pl")
+                                   default="pl", choises=["pl", "eng"])
     dispatcher_parser.add_argument("--location-id", type=str,
                                    default=274723)
 
@@ -24,9 +24,14 @@ def get_args():
 def main():
     args = get_args()
 
+    domain = {
+        "pl": "https://pl.tripadvisor.com",
+        "eng": "https://www.tripadvisor.com"
+        }
+
     opt = {
         "dispatcher": lambda: Dispatcher(args.location_id),
-        "worker": lambda: Worker(),
+        "worker": lambda: Worker(domain[args.domain]),
         "collector": lambda: Collector()
         }
     opt[args.type]()

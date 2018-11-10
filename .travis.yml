@@ -24,9 +24,9 @@ before_script:
 
 script:
 - kubectl cluster-info
-- flake8 --ignore=W605 --max-line-length=100 src/
-- flake8 --ignore=W605 --max-line-length=100 tests/
-- pytest -v tests/
+- flake8 --max-line-length=100 src/
+- flake8 --max-line-length=100 tests/
+- python -m pytest -v tests/
 
 notifications:
 email: false

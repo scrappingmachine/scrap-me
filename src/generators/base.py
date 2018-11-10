@@ -39,7 +39,7 @@ class BaseGenerator(object):
             set_of_ids = {a.group(1) for a in set_of_ids if a}
 
             if not set_of_ids:
-                raise StopIteration
+                return
 
             for h in set_of_ids:
                 yield h
@@ -47,4 +47,4 @@ class BaseGenerator(object):
             offset += offset_step
             url = base_url.format(*ids, offset)
             if not soup.find("a", attrs={"data-offset": offset}):
-                raise StopIteration
+                return
