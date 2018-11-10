@@ -39,7 +39,7 @@ class Worker(BaseNode):
             rating = rating.group(1) if rating else None
         else:
             rating = None
-        reviews = list(ReviewGenerator(city_id, hotel_id, domain))
+        reviews = list(ReviewGenerator(city_id, hotel_id, self.domain))
         reviews = list(set(reviews))
 
         if reviews and name:

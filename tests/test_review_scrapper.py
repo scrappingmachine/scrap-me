@@ -19,8 +19,7 @@ reviews = [
 
 domains = {
     "pl": "https://pl.tripadvisor.com",
-    "eng": "https://www.tripadvisor.com"
-    }
+    "eng": "https://www.tripadvisor.com"}
 
 
 @pytest.mark.parametrize("language, city_id, hotel_id, review_id", reviews)
