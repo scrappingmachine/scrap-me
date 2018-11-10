@@ -66,8 +66,8 @@ jobs:
           python3 -m venv .venv
           . ~/scrap-me/.venv/bin/activate
           pip install -q flake8
-          echo "Test src catalog: " && flake8 --ignore=W605 --max-line-length=100 src/
-          echo "Test tests catalog: " && flake8 --ignore=W605 --max-line-length=100 tests/
+          echo "Test src catalog: " && flake8 --max-line-length=100 src/
+          echo "Test tests catalog: " && flake8 --max-line-length=100 tests/
   tests:
     docker:
     - image: circleci/python:3.6.6-jessie-browsers
@@ -80,7 +80,7 @@ jobs:
           python3 -m venv .venv
           . ~/scrap-me/.venv/bin/activate
           pip install -q -r requirements.txt
-          pytest -v tests/
+          python -m pytest -v tests/
 workflows:
   version: 2
   create_environment:

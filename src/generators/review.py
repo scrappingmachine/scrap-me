@@ -6,17 +6,15 @@ import re
 
 class ReviewGenerator(BaseGenerator):
 
-    def __init__(self, city_id, hotel_id):
+    def __init__(self, city_id, hotel_id, domain="https://pl.tripadvisor.com"):
         self.city_id = city_id
         self.hotel_id = hotel_id
+        self.domain = domain
 
-    def __iter__(self):
-        for review_id in self._review_id_generator(
-                self.city_id, self.hotel_id):
+    def scrap_review(self, city_id, hotel_id, review_id):
             url = (
-                "https://pl.tripadvisor.com/ShowUserReviews-"
-                "g{}-d{}-r{}.html").format(
-                    self.city_id, self.hotel_id, review_id)
+                self.domain + "/ShowUserReviews-g{}-d{}-r{}.html").format(
+                    city_id, hotel_id, review_id)
             soup = self.get_soup(url)
             try:
                 rating = soup.find("span", attrs={
@@ -29,14 +27,23 @@ class ReviewGenerator(BaseGenerator):
                 text = soup.find("span", attrs={
                     "class": "fullText"}).text
             except AttributeError:
-                continue
+                return None
 
             if text:
                 print(url)
-                yield Review(title, author, rating, text, url)
-            else:
-                print("Ommiting {} - "
-                      "translation from another language".format(url))
+                return Review(title, author, rating, text, url)
+
+            print("Ommiting: ", url)
+            return None
+
+    def __iter__(self):
+        for review_id in self._review_id_generator(
+                self.city_id, self.hotel_id):
+
+            review = self.scrap_review(self.city_id, self.hotel_id, review_id)
+
+            if review:
+                yield review
 
     def _review_id_generator(self, city_id, hotel_id):
         gen = self._id_generators(
