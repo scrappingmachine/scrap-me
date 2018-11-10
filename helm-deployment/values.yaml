@@ -47,6 +47,11 @@ tolerations: []
 
 affinity: {}
 
+rabbitmq:
+  rabbitmq:
+    username: "user"
+    password: "user"
+
 global:
   rabbitmq:
     username: "user"
