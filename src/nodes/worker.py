@@ -13,7 +13,7 @@ class CustomEncoder(json.JSONEncoder):
 
 class Worker(BaseNode):
 
-    def __init__(self):
+    def __init__(self, domain):
         super(Worker, self).__init__()
         self.channel.queue_declare(queue='scrap_task')
         self.channel.queue_declare(queue='scrap_result')
@@ -22,9 +22,10 @@ class Worker(BaseNode):
             queue='scrap_task',
             no_ack=True)
         self.channel.start_consuming()
+        self.domain = domain
 
     def process_task(self, city_id, hotel_id):
-        url = "https://pl.tripadvisor.com/Hotel_Review-g{}-d{}".format(
+        url = self.domain + "/Hotel_Review-g{}-d{}".format(
             city_id, hotel_id)
         soup = ReviewGenerator.get_soup(url)
         name = soup.find("h1", attrs={
@@ -38,7 +39,7 @@ class Worker(BaseNode):
             rating = rating.group(1) if rating else None
         else:
             rating = None
-        reviews = list(ReviewGenerator(city_id, hotel_id))
+        reviews = list(ReviewGenerator(city_id, hotel_id, domain))
         reviews = list(set(reviews))
 
         if reviews and name:
