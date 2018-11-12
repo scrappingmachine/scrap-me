@@ -21,7 +21,8 @@ class Collector(BaseNode):
             addr,
             access_key=user,
             secret_key=password,
-            secure=False)
+            secure=False,
+            region='us-east-1')
 
         try:
             self.minioClient.make_bucket("reviews")
@@ -40,7 +41,7 @@ class Collector(BaseNode):
 
     def callback(self, ch, method, properties, body):
         d = json.loads(body)
-        logging.info(f"New review was found: {d['name']}")
+        logging.info("New review was found")
         self.minioClient.put_object(
             "reviews",
             d["name"],

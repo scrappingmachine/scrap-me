@@ -51,7 +51,7 @@ class Worker(BaseNode):
         body = body.decode().split()
         hotel = self.process_task(body[0], body[1])
 
-        logging.info(f"New hotel was found - {hotel.name}")
+        logging.info("New hotel was found")
         if hotel:
             self.channel.basic_publish(
                 exchange='',
