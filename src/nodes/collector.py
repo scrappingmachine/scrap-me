@@ -41,7 +41,7 @@ class Collector(BaseNode):
 
     def callback(self, ch, method, properties, body):
         d = json.loads(body)
-        logging.info("New review was found")
+        print("Putting hotel to minio")
         self.minioClient.put_object(
             "reviews",
             d["name"],

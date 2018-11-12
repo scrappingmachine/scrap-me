@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: worker
 spec:
-  replicas: 4
+  replicas: 1
   template:
     metadata:
       labels:

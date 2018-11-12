@@ -50,8 +50,7 @@ class Worker(BaseNode):
     def callback(self, ch, method, properties, body):
         body = body.decode().split()
         hotel = self.process_task(body[0], body[1])
-
-        logging.info("New hotel was found")
+        print("Hotel scrapped")
         if hotel:
             self.channel.basic_publish(
                 exchange='',

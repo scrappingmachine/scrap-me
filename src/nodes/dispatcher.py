@@ -14,7 +14,6 @@ class Dispatcher(BaseNode):
     def __start(self):
 
         for task in HotelGenerator(self.location_id):
-            logging.info("New task showed up")
             self.channel.basic_publish(
                 exchange='',
                 routing_key='scrap_task',
