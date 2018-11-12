@@ -17,6 +17,6 @@ test:
 	pytest -v tests/
 
 style:
-	flake8 --max-line-length=100 src tests
+	flake8 --max-line-length=100 src tests main.py
 
 all_tests: style test

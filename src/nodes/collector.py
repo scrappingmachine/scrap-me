@@ -8,6 +8,7 @@ from minio.error import BucketAlreadyOwnedByYou
 from minio.error import BucketAlreadyExists
 import logging
 
+
 class Collector(BaseNode):
 
     def __init__(self):
@@ -38,8 +39,8 @@ class Collector(BaseNode):
         self.channel.start_consuming()
 
     def callback(self, ch, method, properties, body):
-        logging.info(f"New review was found: {d['name']}")
         d = json.loads(body)
+        logging.info(f"New review was found: {d['name']}")
         self.minioClient.put_object(
             "reviews",
             d["name"],
