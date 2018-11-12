@@ -1,5 +1,6 @@
 from src.nodes.base import BaseNode
 from src.generators.hotel import HotelGenerator
+import logging
 
 
 class Dispatcher(BaseNode):
@@ -13,6 +14,7 @@ class Dispatcher(BaseNode):
     def __start(self):
 
         for task in HotelGenerator(self.location_id):
+            logging.info(f"New task showed up: {task}")
             self.channel.basic_publish(
                 exchange='',
                 routing_key='scrap_task',

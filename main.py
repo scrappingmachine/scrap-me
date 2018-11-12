@@ -10,12 +10,12 @@ def get_args():
     subparsers.required = True
 
     dispatcher_parser = subparsers.add_parser("dispatcher")
-    dispatcher_parser.add_argument("--domain", type=str,
-                                   default="pl", choises=["pl", "eng"])
     dispatcher_parser.add_argument("--location-id", type=str,
                                    default=274723)
 
-    subparsers.add_parser("worker")
+    worker_parser = subparsers.add_parser("worker")
+    worker_parser.add_argument("--domain", type=str,
+                               default="pl", choices=["pl", "eng"])
     subparsers.add_parser("collector")
 
     return parser.parse_args()

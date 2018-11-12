@@ -84,6 +84,8 @@ celerybeat-schedule
 # Environments
 .env
 .venv
+.venv3
+.venv36
 env/
 venv/
 ENV/
@@ -104,4 +106,7 @@ venv.bak/
 .mypy_cache/
 
 .idea
+
+*.tgz
+
 

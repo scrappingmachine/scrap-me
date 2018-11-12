@@ -12,6 +12,7 @@ jobs:
       MINIKUBE_WANTREPORTERRORPROMPT: false
       MINIKUBE_HOME: /home/circleci
       CHANGE_MINIKUBE_NONE_USER: true
+    working_directory: ~/scrap-me
     steps:
     - checkout
     - run:
@@ -54,6 +55,11 @@ jobs:
           kubectl -n kube-system create sa tiller
           kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
           helm init --wait --service-account tiller
+    - run:
+        name: run deployment
+        command: |
+          helm dep up helm-deployment/
+          helm install -n scrap-me helm-deployment/
   style_check:
     docker:
     - image: circleci/python:3.6.6-jessie-browsers

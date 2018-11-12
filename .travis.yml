@@ -21,9 +21,14 @@ before_script:
 - minikube update-context
 # Wait for Kubernetes to be up and ready.
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
+- curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
+- kubectl -n kube-system create sa tiller
+- kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+- helm init --wait --service-account tiller
 
 script:
-- kubectl cluster-info
+- helm dep up helm-deployment/
+  helm install -n scrap-me helm-deployment/
 - flake8 --max-line-length=100 src/
 - flake8 --max-line-length=100 tests/
 - python -m pytest -v tests/

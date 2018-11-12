@@ -5,6 +5,8 @@ from src.hotel import Hotel
 import json
 import re
 
+import logging
+
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -15,6 +17,7 @@ class Worker(BaseNode):
 
     def __init__(self, domain):
         super(Worker, self).__init__()
+        self.domain = domain
         self.channel.queue_declare(queue='scrap_task')
         self.channel.queue_declare(queue='scrap_result')
         self.channel.basic_consume(
@@ -22,7 +25,6 @@ class Worker(BaseNode):
             queue='scrap_task',
             no_ack=True)
         self.channel.start_consuming()
-        self.domain = domain
 
     def process_task(self, city_id, hotel_id):
         url = self.domain + "/Hotel_Review-g{}-d{}".format(
@@ -49,6 +51,7 @@ class Worker(BaseNode):
         body = body.decode().split()
         hotel = self.process_task(body[0], body[1])
 
+        logging.info(f"New hotel was found - {hotel.name}")
         if hotel:
             self.channel.basic_publish(
                 exchange='',

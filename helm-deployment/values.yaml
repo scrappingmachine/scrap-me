@@ -47,6 +47,11 @@ tolerations: []
 
 affinity: {}
 
+minio:
+  enabled: true
+  accessKey: "AKIAIOSFODNN7EXAMPLE"
+  secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+
 rabbitmq:
   rabbitmq:
     username: "user"
@@ -56,3 +61,6 @@ global:
   rabbitmq:
     username: "user"
     password: "user"
+  minio:
+    accessKey: "AKIAIOSFODNN7EXAMPLE"
+    secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"

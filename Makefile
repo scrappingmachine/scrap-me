@@ -1,4 +1,4 @@
-.PHONY: venv install run test style build all_tests
+.PHONY: venv install run test style build all_tests push
 TAG=latest
 
 venv:
@@ -10,10 +10,13 @@ install:
 build:
 	docker build -t scrappingmachine/scrap-me:${TAG} .
 
+push:
+	docker push scrappingmachine/scrap-me:${TAG}
+
 test:
 	pytest -v tests/
 
 style:
-	flake8 --max-line-length=100 client server tests utils
+	flake8 --max-line-length=100 src tests
 
 all_tests: style test
