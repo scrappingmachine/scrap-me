@@ -4,31 +4,8 @@ python:
   - "3.6"
 install:
   pip install -r requirements.txt
-env:
-  global:
-  - CHANGE_MINIKUBE_NONE_USER=true
-  - K8S_VERSION="v1.10.0"
-  - MINIKUBE_VERSION="v0.28.2"
-
-before_script:
-# Download kubectl, which is a requirement for using minikube.
-- curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/${K8S_VERSION}/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-# Download minikube.
-- curl -Lo minikube https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
-# TODO: remove the --bootstrapper flag once this issue is solved: https://github.com/kubernetes/minikube/issues/2704
-- sudo minikube config set WantReportErrorPrompt false
-- sudo -E minikube start --vm-driver=none --bootstrapper=localkube --kubernetes-version=${K8S_VERSION} --extra-config=apiserver.Authorization.Mode=RBAC
-- minikube update-context
-# Wait for Kubernetes to be up and ready.
-- JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
-- curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
-- kubectl -n kube-system create sa tiller
-- kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
-- helm init --wait --service-account tiller
 
 script:
-- helm dep up helm-deployment/
-  helm install -n scrap-me helm-deployment/
 - flake8 --max-line-length=100 src/
 - flake8 --max-line-length=100 tests/
 - python -m pytest -v tests/
