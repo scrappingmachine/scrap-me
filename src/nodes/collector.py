@@ -6,7 +6,6 @@ import io
 from minio import Minio
 from minio.error import BucketAlreadyOwnedByYou
 from minio.error import BucketAlreadyExists
-import logging
 
 
 class Collector(BaseNode):

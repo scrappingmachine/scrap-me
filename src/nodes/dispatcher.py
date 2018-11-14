@@ -1,6 +1,5 @@
 from src.nodes.base import BaseNode
 from src.generators.hotel import HotelGenerator
-import logging
 
 
 class Dispatcher(BaseNode):

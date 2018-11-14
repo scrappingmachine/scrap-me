@@ -49,18 +49,18 @@ affinity: {}
 
 minio:
   enabled: true
-  accessKey: "AKIAIOSFODNN7EXAMPLE"
-  secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+  accessKey: &accessKey "AKIAIOSFODNN7EXAMPLE"
+  secretKey: &secretKey "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 
 rabbitmq:
   rabbitmq:
-    username: "user"
-    password: "user"
+    username: &username "user"
+    password: &password "user"
 
 global:
   rabbitmq:
-    username: "user"
-    password: "user"
+    username: *username
+    password: *password
   minio:
-    accessKey: "AKIAIOSFODNN7EXAMPLE"
-    secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    accessKey: *accessKey
+    secretKey: *secretKey

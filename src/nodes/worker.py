@@ -5,8 +5,6 @@ from src.hotel import Hotel
 import json
 import re
 
-import logging
-
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
