@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: collector
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: collector
+    spec:
+      containers:
+      - name: collector
+        image: {{ .Values.image }}:{{ .Values.tag }}
+        command:
+        - collector
+        env:
+        - name: MINIO_ADDR
+          valueFrom:
+            secretKeyRef:
+              name: minio
+              key: endpoint
+        - name: MINIO_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio
+              key: accessKey
+        - name: MINIO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio
+              key: secretKey
+        - name: RABBITMQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: username
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: password
+        - name: RABBITMQ_ADDR
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: address

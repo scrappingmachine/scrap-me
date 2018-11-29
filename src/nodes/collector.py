@@ -12,15 +12,16 @@ class Collector(BaseNode):
 
     def __init__(self):
         super(Collector, self).__init__()
-        user = os.environ["MINIO_USER"]
-        password = os.environ["MINIO_PASSWORD"]
+        user = os.environ["MINIO_ACCESS_KEY"]
+        password = os.environ["MINIO_SECRET_KEY"]
         addr = os.environ["MINIO_ADDR"]
 
         self.minioClient = Minio(
-            addr + ":9000",
+            addr,
             access_key=user,
             secret_key=password,
-            secure=False)
+            secure=False,
+            region='us-east-1')
 
         try:
             self.minioClient.make_bucket("reviews")
@@ -39,6 +40,7 @@ class Collector(BaseNode):
 
     def callback(self, ch, method, properties, body):
         d = json.loads(body)
+        print("Putting hotel to minio")
         self.minioClient.put_object(
             "reviews",
             d["name"],

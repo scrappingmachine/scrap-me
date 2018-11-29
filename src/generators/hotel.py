@@ -10,6 +10,7 @@ class HotelGenerator(BaseGenerator):
 
         for city_id in self._city_id_generator(self.location_id):
             for hotel_id in self._hotel_id_generator(city_id):
+                print("City: ", city_id, "Hotel: ", hotel_id)
                 yield city_id, hotel_id
 
     def _hotel_id_generator(self, city_id):
@@ -25,6 +26,7 @@ class HotelGenerator(BaseGenerator):
 
     def _city_id_generator(self, location_id):
 
+        print("https://pl.tripadvisor.com/Hotels-g{}".format(location_id))
         soup = self.get_soup(
             "https://pl.tripadvisor.com/Hotels-g{}".format(location_id))
 
