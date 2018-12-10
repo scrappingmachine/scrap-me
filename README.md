@@ -46,9 +46,8 @@ helm init --wait --service-account tiller
 in case of problem with RBAC role, please run `kubectl create clusterrolebinding add-on-cluster-admin --clusterrole cluster-admin --serviceaccount=kube-system:default`
 
 ## Deployment
-* build project and push new image to Docker Hub (you need to login to docker first)
+* build project
 	* `make build`
-	* `make push`
 * if you want to use custom `scrap-me` image, please override `image`/`tag` value/values used by 
 scrap-me-chart
 * run `helm dep up helm-deployment/` to get minio and rabbitmq
